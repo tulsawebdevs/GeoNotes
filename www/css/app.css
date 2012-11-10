@@ -8,7 +8,8 @@
 /* Your styles here */
 
 #note-list ul { list-style-type: none; text-align:center; }
-#note-list ul li { overflow: hidden; text-overflow: ellipsis; height: 1.7em; position: relative; }
+#note-list ul li { overflow: hidden; height: 1.7em; position: relative; font-size: 1.5em; padding: .2em 4em .2em 0; text-overflow: ellipsis; }
+#note-list .text { white-space: nowrap; }
 #note-list .meta { position: absolute; right: 0; top: 0; }
 
 button.install-btn { padding: 0; width: 100%; }
