@@ -4,9 +4,21 @@
 
 require.config({
     baseUrl: 'js/lib',
-    paths: {'jquery':
-            ['http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min',
-             'jquery']}
+    paths: {
+      'jquery': 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min',
+      'underscore': 'underscore',
+      'backbone': 'backbone'
+    },
+    shim: {
+      backbone: {
+        deps: ["underscore", "jquery"],
+        exports: "Backbone"
+      },
+      bootstrap: {
+        deps: ["jquery"],
+        exports: "$"
+      }
+    }
 });
 
 // Include the in-app payments API, and if it fails to load handle it
@@ -25,9 +37,7 @@ require(['https://marketplace.cdn.mozilla.net/mozmarket.js'],
 
 // When you write javascript in separate files, list them as
 // dependencies along with jquery
-define("app", function(require) {
-
-    var $ = require('jquery');
+define("app", ['backbone', 'install'], function(Backbone, install) {
 
     var Note = Backbone.Model.extend({});
 
@@ -53,7 +63,7 @@ define("app", function(require) {
     });
 
     var NoteListView = Backbone.View.extend({
-      el: $("#note-list"),
+      el: '#note-list',
       initialize: function(){
         this.bind('render', this);
         this.collection.on('change', this.render);
@@ -80,9 +90,6 @@ define("app", function(require) {
 
     // Hook up the installation button, feel free to customize how
     // this works
-    
-    var install = require('install');
-
     function updateInstallButton() {
         $(function() {
             var btn = $('.install-btn');
