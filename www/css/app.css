@@ -2,7 +2,13 @@
 @import "defaults.css";
 
 /* Uncomment these to use Twitter Bootstrap */
-/* @import "bootstrap.css"; */
-/* @import "bootstrap-responsive.css"; */
+@import "bootstrap.css"; */
+@import "bootstrap-responsive.css"; */
 
 /* Your styles here */
+
+#note-list ul { list-style-type: none; text-align:center; }
+#note-list ul li { overflow: hidden; text-overflow: ellipsis; height: 1.7em; position: relative; }
+#note-list .meta { position: absolute; right: 0; top: 0; }
+
+button.install-btn { padding: 0; width: 100%; }
