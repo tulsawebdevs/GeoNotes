@@ -54,20 +54,20 @@ define("app", function(require) {
 
     var NoteListView = Backbone.View.extend({
       el: $("#note-list"),
-        initialize: function(){
-          this.bind('render', this);
-          this.collection.on('change', this.render);
-        },
-        render: function(){
-          var listView = this;
-          var $ul = this.$el.find("ul");
-          $ul.empty();
-          this.collection.each(function(model){
-            var view = new NoteListItemView({model: model}).render();
-            $ul.append(view.$el);
-          });
-          return this;
-        }
+      initialize: function(){
+        this.bind('render', this);
+        this.collection.on('change', this.render);
+      },
+      render: function(){
+        var listView = this;
+        var $ul = this.$el.find("ul");
+        $ul.empty();
+        this.collection.each(function(model){
+          var view = new NoteListItemView({model: model}).render();
+          $ul.append(view.$el);
+        });
+        return this;
+      }
     });
 
     var notes = new NoteList([
