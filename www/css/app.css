@@ -6,8 +6,9 @@
 @import "bootstrap-responsive.css"; */
 
 /* Your styles here */
-
-#note-list ul { list-style-type: none; text-align:center; }
+h1 { text-align: center; }
+#note-list { padding: 1em 0; }
+#note-list ul { list-style-type: none; margin: 0; }
 #note-list ul li { overflow: hidden; height: 1.7em; position: relative; font-size: 1.5em; padding: .2em 4em .2em 0; text-overflow: ellipsis; }
 #note-list .text { white-space: nowrap; }
 #note-list .meta { position: absolute; right: 0; top: 0; }
