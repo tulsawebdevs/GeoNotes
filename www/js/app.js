@@ -2,12 +2,11 @@
 // The code below uses require.js, a module system for javscript:
 // http://requirejs.org/docs/api.html#define
 
-require.config({ 
+require.config({
     baseUrl: 'js/lib',
     paths: {'jquery':
-            ['//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min',
-             'jquery']},
-
+            ['http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min',
+             'jquery']}
 });
 
 // Include the in-app payments API, and if it fails to load handle it
@@ -30,17 +29,54 @@ define("app", function(require) {
 
     var $ = require('jquery');
 
-    // If using Twitter Bootstrap, you need to require all the
-    // components that you use, like so:
-    // require('bootstrap/dropdown');
-    // require('bootstrap/alert');
+    var Note = Backbone.Model.extend({});
 
+    var NoteList = Backbone.Collection.extend({
+      model: Note
+    });
 
-    // START HERE: Put your js code here
+    var TemplatedView = Backbone.View.extend({
+      render: function(){
+        var html = this.template(this.model.toJSON());
+        this.$el.html(html);
+        return this;
+      }
+    });
 
+    var NoteListItemView = TemplatedView.extend({
+      tag: "li",
+      template: _.template($("#note-list-template").html()),
+      initialize: function(){
+        this.bind('render', this);
+        this.model.on('change', this.render);
+      }
+    });
 
+    var NoteListView = Backbone.View.extend({
+      el: $("#note-list"),
+        initialize: function(){
+          this.bind('render', this);
+          this.collection.on('change', this.render);
+        },
+        render: function(){
+          var listView = this;
+          var $ul = this.$el.find("ul");
+          $ul.empty();
+          this.collection.each(function(model){
+            var view = new NoteListItemView({model: model}).render();
+            $ul.append(view.$el);
+          });
+          return this;
+        }
+    });
 
+    var notes = new NoteList([
+        {text: "Hello, fablab", position: {lat: 1, lng: 1}},
+        {text: "Hello, fablab Tulsa", position: {lat: 1, lng: 1}}
+    ]);
 
+    var noteListView = new NoteListView({collection: notes});
+    noteListView.render();
 
     // Hook up the installation button, feel free to customize how
     // this works
@@ -60,7 +96,7 @@ define("app", function(require) {
     }
 
     $(function() {
-        $('.install-btn').click(install);        
+        $('.install-btn').click(install);
     });
 
     install.on('change', updateInstallButton);
