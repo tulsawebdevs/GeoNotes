@@ -44,66 +44,80 @@ require(['https://marketplace.cdn.mozilla.net/mozmarket.js'],
 // dependencies along with jquery
 define("app", ['backbone', 'install', 'localstorage'], function(Backbone, install) {
 
-    var Note = Backbone.Model.extend({});
+    var AppRouter = Backbone.Router.extend({
+        routes: {
+            "add": "addNote",
+            ".*": "viewNotes"
+        },
+        viewNotes: function() {
+          var Note = Backbone.Model.extend({});
 
-    console.log('local', Store);
+          var NoteList = Backbone.Collection.extend({
+            model: Note,
+            localStorage: new Store("notes"),
+            initialize: function(){
+              this.fetch();
+              this.on('add', function(model){
+                console.log('model', model);
+                model.save();
+              });
+            }
+          });
 
-    var NoteList = Backbone.Collection.extend({
-      model: Note,
-      localStorage: new Store("notes"),
-      initialize: function(){
-        this.fetch();
-        this.on('add', function(model){
-          console.log('model', model);
-          model.save();
-        });
-      }
+          var TemplatedView = Backbone.View.extend({
+            render: function(){
+              var html = this.template(this.model.toJSON());
+              this.$el.html(html);
+              return this;
+            }
+          });
+
+          var NoteListItemView = TemplatedView.extend({
+            template: _.template($("#note-list-template").html()),
+            initialize: function(){
+              this.bind('render', this);
+              this.model.on('change', this.render);
+            }
+          });
+
+          var NoteListView = Backbone.View.extend({
+            el: '#note-list',
+            initialize: function(){
+              this.bind('render', this);
+              this.collection.on('change', this.render);
+            },
+            render: function(){
+              var listView = this;
+              var $ul = this.$el.find("ul");
+              $ul.empty();
+              this.collection.each(function(model){
+                var view = new NoteListItemView({model: model}).render();
+                $ul.append(view.$el);
+              });
+              return this;
+            }
+          });
+
+          var notes = new NoteList([
+              {text: "garage: 1122", position: {lat: 1, lng: 1}},
+              {text: "buy airlock", position: {lat: 1, lng: 1}},
+              {text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", position: {lat: 1, lng: 1}}
+          ]);
+
+      //    notes.each(function(note){ notes.add(note); });
+
+          var noteListView = new NoteListView({collection: notes});
+          noteListView.render();
+        },
+        addNote: function() {
+          alert('hell yeah!');
+        }
     });
 
-    var TemplatedView = Backbone.View.extend({
-      render: function(){
-        var html = this.template(this.model.toJSON());
-        this.$el.html(html);
-        return this;
-      }
-    });
+    var app_router = new AppRouter();
 
-    var NoteListItemView = TemplatedView.extend({
-      template: _.template($("#note-list-template").html()),
-      initialize: function(){
-        this.bind('render', this);
-        this.model.on('change', this.render);
-      }
-    });
-
-    var NoteListView = Backbone.View.extend({
-      el: '#note-list',
-      initialize: function(){
-        this.bind('render', this);
-        this.collection.on('change', this.render);
-      },
-      render: function(){
-        var listView = this;
-        var $ul = this.$el.find("ul");
-        $ul.empty();
-        this.collection.each(function(model){
-          var view = new NoteListItemView({model: model}).render();
-          $ul.append(view.$el);
-        });
-        return this;
-      }
-    });
-
-    var notes = new NoteList([
-        {text: "garage: 1122", position: {lat: 1, lng: 1}},
-        {text: "buy airlock", position: {lat: 1, lng: 1}},
-        {text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", position: {lat: 1, lng: 1}}
-    ]);
-
-//    notes.each(function(note){ notes.add(note); });
-
-    var noteListView = new NoteListView({collection: notes});
-    noteListView.render();
+    // Start Backbone history a necessary step for bookmarkable URL's
+    Backbone.history.start();
 
     // Hook up the installation button, feel free to customize how
     // this works
