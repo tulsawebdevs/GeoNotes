@@ -50,7 +50,7 @@ define("app", ['backbone', 'install', 'localstorage'], function(Backbone, instal
 
     var NoteList = Backbone.Collection.extend({
       model: Note,
-      localStorage: new Store("mozillanotes"),
+      localStorage: new Store("notes"),
       initialize: function(){
         this.fetch();
         this.on('add', function(model){
@@ -69,7 +69,6 @@ define("app", ['backbone', 'install', 'localstorage'], function(Backbone, instal
     });
 
     var NoteListItemView = TemplatedView.extend({
-      tag: "li",
       template: _.template($("#note-list-template").html()),
       initialize: function(){
         this.bind('render', this);
@@ -96,16 +95,12 @@ define("app", ['backbone', 'install', 'localstorage'], function(Backbone, instal
     });
 
     var notes = new NoteList([
-        {text: "Hello, fablab", position: {lat: 1, lng: 1}},
-        {text: "Hello, fablab Tulsa", position: {lat: 1, lng: 1}}
+        {text: "garage: 1122", position: {lat: 1, lng: 1}},
+        {text: "buy airlock", position: {lat: 1, lng: 1}},
+        {text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", position: {lat: 1, lng: 1}}
     ]);
 
-
-    var m = new Note({text: "MeowMeow", position: {lat: 1, lng: 1}});
-    var n = new Note({text: "Rawr", position: {lat: 1, lng: 1}});
-
-    notes.add(m);
-    notes.add(n);
+//    notes.each(function(note){ notes.add(note); });
 
     var noteListView = new NoteListView({collection: notes});
     noteListView.render();
