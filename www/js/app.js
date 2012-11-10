@@ -5,14 +5,19 @@
 require.config({
     baseUrl: 'js/lib',
     paths: {
-      'jquery': 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min',
+      'jquery': 'jquery.min',
       'underscore': 'underscore',
-      'backbone': 'backbone'
+      'backbone': 'backbone',
+      'localstorage': 'backbone.localStorage'
     },
     shim: {
       backbone: {
         deps: ["underscore", "jquery"],
         exports: "Backbone"
+      },
+      localstorage: {
+        deps: ["Backbone", "jquery", "underscore"],
+        exports: "localstorage"
       },
       bootstrap: {
         deps: ["jquery"],
@@ -37,12 +42,22 @@ require(['https://marketplace.cdn.mozilla.net/mozmarket.js'],
 
 // When you write javascript in separate files, list them as
 // dependencies along with jquery
-define("app", ['backbone', 'install'], function(Backbone, install) {
+define("app", ['backbone', 'install', 'localstorage'], function(Backbone, install) {
 
     var Note = Backbone.Model.extend({});
 
+    console.log('local', Store);
+
     var NoteList = Backbone.Collection.extend({
-      model: Note
+      model: Note,
+      localStorage: new Store("mozillanotes"),
+      initialize: function(){
+        this.fetch();
+        this.on('add', function(model){
+          console.log('model', model);
+          model.save();
+        });
+      }
     });
 
     var TemplatedView = Backbone.View.extend({
@@ -84,6 +99,13 @@ define("app", ['backbone', 'install'], function(Backbone, install) {
         {text: "Hello, fablab", position: {lat: 1, lng: 1}},
         {text: "Hello, fablab Tulsa", position: {lat: 1, lng: 1}}
     ]);
+
+
+    var m = new Note({text: "MeowMeow", position: {lat: 1, lng: 1}});
+    var n = new Note({text: "Rawr", position: {lat: 1, lng: 1}});
+
+    notes.add(m);
+    notes.add(n);
 
     var noteListView = new NoteListView({collection: notes});
     noteListView.render();
