@@ -8,7 +8,7 @@ require.config({
       'jquery': 'jquery.min',
       'underscore': 'underscore',
       'backbone': 'backbone',
-      'localstorage': 'backbone.localStorage'
+      'localstorage': 'localstorage'
     },
     shim: {
       backbone: {
@@ -113,6 +113,16 @@ define("app", ['backbone', 'install', 'localstorage'], function(Backbone, instal
           alert('hell yeah!');
         }
     });
+
+    var note = new Note({text: "garage: 1122", position: {lat: 1, lng: 1}});
+    notes.add(note);
+    var note = new Note({text: "buy airlock", position: {lat: 1, lng: 1}});
+    notes.add(note);
+    var note = new Note({text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", position: {lat: 1, lng: 1}});
+    notes.add(note);
+
+    var noteListView = new NoteListView({collection: notes});
+    noteListView.render();
 
     var app_router = new AppRouter();
 
