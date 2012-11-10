@@ -39,7 +39,6 @@ define("app", ['backbone', 'install', 'localstorage', 'Note'], function(Backbone
         },
         addNote: function() {
           this.switchView('addNote');
-          alert('hell yeah!');
         }
     });
 

@@ -54,6 +54,10 @@ define("Note", ["backbone", "localstorage"], function(Backbone, localstorage){
         // TODO: implement
     });
 
+    Note.AddView = Backbone.View.extend({
+        // TODO: implement
+    });
+
     console.log(Note);
     return Note;
 });
