@@ -18,8 +18,10 @@ require(['https://marketplace.cdn.mozilla.net/mozmarket.js'],
 
 // When you write javascript in separate files, list them as
 // dependencies along with jquery
-define("app", ['backbone', 'install', 'localstorage', 'viewNotes'], function(Backbone, install, localstorage, viewNotes) {
-    var app = {};
+define("app", ['backbone', 'install', 'localstorage', 'Note'], function(Backbone, install, localstorage, Note) {
+    var app = {},
+        noteList = new Note.List();
+    var noteListView = new Note.ListView({collection: noteList});
 
     app.Router = Backbone.Router.extend({
         routes: {
@@ -33,7 +35,7 @@ define("app", ['backbone', 'install', 'localstorage', 'viewNotes'], function(Bac
         },
         viewNotes: function() {
           this.switchView('viewNotes');
-          viewNotes.listView.render();
+          noteListView.render();
         },
         addNote: function() {
           this.switchView('addNote');
