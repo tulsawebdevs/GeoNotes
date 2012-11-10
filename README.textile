@@ -1,4 +1,10 @@
 
-h1. My Open Web App
+h1. GeoNotes
 
-This is an awesome app that I'm working on. I will fill out this README soon.
+GeoNotes lets you take notes specific to a location, so you can find notes near you.
+
+h1. Getting Started
+
+# Fork repository
+# git clone the fork
+# volo serve
