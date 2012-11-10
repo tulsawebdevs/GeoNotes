@@ -1,38 +1,6 @@
-// Create global var - lol
-var app = {
-  model: {},
-  view: {},
-  collection: {},
-  template: {}
-};
-
 // The code below uses require.js, a module system for javscript:
 // http://requirejs.org/docs/api.html#define
 
-require.config({
-    baseUrl: 'js/lib',
-    paths: {
-      'jquery': 'jquery.min',
-      'underscore': 'underscore',
-      'backbone': 'backbone',
-      'localstorage': 'localstorage',
-      'viewNotes': 'viewNotes'
-    },
-    shim: {
-      backbone: {
-        deps: ["underscore", "jquery"],
-        exports: "Backbone"
-      },
-      localstorage: {
-        deps: ["Backbone", "jquery", "underscore"],
-        exports: "localstorage"
-      },
-      bootstrap: {
-        deps: ["jquery"],
-        exports: "$"
-      }
-    }
-});
 
 // Include the in-app payments API, and if it fails to load handle it
 // gracefully.
@@ -50,9 +18,10 @@ require(['https://marketplace.cdn.mozilla.net/mozmarket.js'],
 
 // When you write javascript in separate files, list them as
 // dependencies along with jquery
-define("app", ['backbone', 'install', 'localstorage', 'viewNotes'], function(Backbone, install) {
+define("app", ['backbone', 'install', 'localstorage', 'viewNotes'], function(Backbone, install, localstorage, viewNotes) {
+    var app = {};
 
-    var AppRouter = Backbone.Router.extend({
+    app.Router = Backbone.Router.extend({
         routes: {
             "add": "addNote",
             ".*": "viewNotes"
@@ -64,18 +33,13 @@ define("app", ['backbone', 'install', 'localstorage', 'viewNotes'], function(Bac
         },
         viewNotes: function() {
           this.switchView('viewNotes');
-          app.view.NoteListView.render();
+          viewNotes.listView.render();
         },
         addNote: function() {
           this.switchView('addNote');
           alert('hell yeah!');
         }
     });
-
-    var app_router = new AppRouter();
-
-    // Start Backbone history a necessary step for bookmarkable URL's
-    Backbone.history.start();
 
     // Hook up the installation button, feel free to customize how
     // this works
@@ -112,4 +76,6 @@ define("app", ['backbone', 'install', 'localstorage', 'viewNotes'], function(Bac
         }, 8000);
     });
 
+    console.log(app);
+    return app;
 });
