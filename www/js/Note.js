@@ -127,14 +127,14 @@ define("Note", ["backbone", "localstorage"], function(Backbone, localstorage){
         // Variables
         var addNote = $('#addNote'),
           text = $('textarea[name=noteText]', addNote).val(),
-          posx = $('input[name=posx]', addNote).val(),
-          posy = $('input[name=posy]', addNote).val();
+          latitude = $('input[data-name=latitude]', addNote).val(),
+          longitude = $('input[data-name=longitude]', addNote).val();
         // Add note
         this.noteList.add(new Note.Model({
           text: text,
           position: {
-            lat: posx,
-            lng: posy
+            lat: latitude,
+            lng: longitude
           }
         }));
         // Redirect
