@@ -55,7 +55,6 @@ define("app", ['backbone', 'install', 'localstorage', 'Note', 'Geo'], function(B
         viewNotes: function() {
           this.switchView('viewNotes');
           noteList.fetch();
-          noteListView.render();
         },
 
         /**
@@ -74,6 +73,9 @@ define("app", ['backbone', 'install', 'localstorage', 'Note', 'Geo'], function(B
           dinoView.render();
         }
     });
+
+    window.app = app;
+    window.noteList = noteList;
 
     /**
      * Boilerplate data

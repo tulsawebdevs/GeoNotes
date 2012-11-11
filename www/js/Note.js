@@ -19,19 +19,6 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
    });
 
     /**
-     * The base Template for ListItemView
-     *
-     * Note.ListView extends Note.ListItemView extends Note.TemplatedView
-     */
-    Note.TemplatedView = Backbone.View.extend({
-      render: function(){
-        var html = this.template(this.model.serialize());
-        this.$el.html(html);
-        return this;
-      }
-    });
-
-    /**
      * The collection of notes (aka notebook!)
      */
     Note.List = Backbone.Collection.extend({
@@ -42,9 +29,11 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
         this.on('add', function(model){
           model.save();
         });
-        this.geo.on('change:currentPosition', function(){
-            _.each(this.models, function(note){
-                note.set("distance", this.geo.distance(note.position));
+        var self = this;
+        this.geo.on('change:currentLat change:currentLng', function(){
+            console.log("change:currentLat: " + self.geo.get("currentPosition"));
+            _.each(self.models, function(note){
+                note.set("distance", self.geo.distance(note.get("position")));
             })
         });
       }
@@ -55,11 +44,16 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
      *
      * Note.ListView extends Note.ListItemView extends Note.TemplatedView
      */
-    Note.ListItemView = Note.TemplatedView.extend({
+    Note.ListItemView = Backbone.View.extend({
       template: _.template($("#note-list-template").html()),
       initialize: function(){
-        this.bind('render', this);
+        _.bindAll(this, 'render');
         this.model.on('change', this.render);
+      },
+      render: function(){
+        var html = this.template(this.model.serialize());
+        this.$el.html(html);
+        return this;
       }
     });
 
@@ -145,7 +139,7 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
             renderCoords(this.geo.get("currentPosition"));
         }
         var self = this;
-        this.geo.on("change:currentPosition", function(){
+        this.geo.on("change:currentLat change:currentLng", function(){
             renderCoords(self.geo.get("currentPosition"));
         });
 
