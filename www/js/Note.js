@@ -1,7 +1,7 @@
 /**
  * Most of the note views, templates, and models are defined here
  */
-define("Note", ["backbone", "localstorage"], function(Backbone, localstorage){
+define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstorage, Geo){
     var Note = {};
 
     /**
@@ -124,17 +124,13 @@ define("Note", ["backbone", "localstorage"], function(Backbone, localstorage){
         this.noteList = noteList;
 
         // Geo location
-        if ("geolocation" in navigator) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            // Update geolocation
+        var geo = new Geo();
+        geo.on("geo", function(position){
             $('input[data-name=latitude]', $('#addNote')).val(position.coords.latitude);
             $('input[data-name=longitude]', $('#addNote')).val(position.coords.longitude);
             $('span[data-name=latitude]', $('#addNote')).text(position.coords.latitude);
             $('span[data-name=longitude]', $('#addNote')).text(position.coords.longitude);
-          });
-        } else {
-          alert("I'm sorry, but geolocation services are not supported by your browser.");
-        }
+        });
 
         // To render or not to render
         if(addNote.text().length > 0) {

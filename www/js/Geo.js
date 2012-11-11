@@ -1,4 +1,4 @@
-define("Geo", ["backbone", "underscore"], function(Backbone, _){
+define("Geo", ["backbone"], function(Backbone){
 
     var Geo;
 
@@ -8,17 +8,19 @@ define("Geo", ["backbone", "underscore"], function(Backbone, _){
         return null;
     }
 
-    var Geo = Backbone.Model.extend({;
+    var Geo = Backbone.Model.extend({
 
         defaults: {
+            wpid: '',
             currentPosition: ''
         },
 
         initialize: function(){
-            navigator.geolocation.watchPosition(function(position){
-                Geo.currentPosition = position;
+            var self = this;
+            this.wpid = navigator.geolocation.watchPosition(function(position){
+                self.currentPosition = position;
+                self.trigger("geo", position);
             });
-            _.extend(Geo, Backbone.Events);
         },
 
         // return haversine distance between pos1 and pos2 ...
@@ -37,7 +39,8 @@ define("Geo", ["backbone", "underscore"], function(Backbone, _){
             var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
                     Math.sin(dLng/2) * Math.sin(dLng/2) * Math.cos(lat1) * Math.cos(lat2);
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return var d = R * c;
+            var d = R * c;
+            return d;
         }
     });
 
