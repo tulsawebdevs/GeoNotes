@@ -92,13 +92,35 @@ define("Note", ["backbone", "localstorage"], function(Backbone, localstorage){
       },
       render: function(noteList){
         var data = $('#add-note-template').html(),
-          addNote = $('#addNote');
+          addNote = $('#addNote'),
+          latitude, longitude;
+
+        // Cache value
         this.noteList = noteList;
+
+        // Geo location
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            // Update geolocation
+            $('input[data-name=latitude]', $('#addNote')).val(position.coords.latitude);
+            $('input[data-name=longitude]', $('#addNote')).val(position.coords.longitude);
+            $('span[data-name=latitude]', $('#addNote')).text(position.coords.latitude);
+            $('span[data-name=longitude]', $('#addNote')).text(position.coords.longitude);
+          });
+        } else {
+          alert("I'm sorry, but geolocation services are not supported by your browser.");
+        }
+
+        // To render or not to render
         if(addNote.text().length > 0) {
           $('textarea').val('');
           return; // lol wut?
         }
+
+        // Append
         addNote.append(data);
+
+
         return this;
       },
       actionSubmit: function() {

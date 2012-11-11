@@ -37,8 +37,12 @@
         <textarea name="noteText" id="noteText"></textarea>
       </div>
       <div class="item">
-        <input type="hidden" name="posx" id="posx" value="1" />
-        <input type="hidden" name="posy" id="posy" value="1" />
+        <span>
+          <span data-name="latitude"><%= latitude %></span>,
+          <span data-name="longitude"><%= longitude %></span>
+        </div>
+        <input type="hidden" data-name="latitude" value="<%=latitude%>" />
+        <input type="hidden" data-name="longitude" value="<%=longitude%>" />
       </div>
       <div class="item">
         <input type="button" class="button addNote" value="Add Note" />
