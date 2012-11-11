@@ -136,10 +136,17 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
           return; // lol wut?
         }
 
-        // Geo location
-        this.geo.on("change:currentPosition", function(position){
+        // Render coords - now and/or when they update
+        var renderCoords = function(position){
             $('span[data-name=latitude]', $('#addNote')).text(position.coords.latitude);
             $('span[data-name=longitude]', $('#addNote')).text(position.coords.longitude);
+        };
+        if (this.geo.get("currentPosition").coords) {
+            renderCoords(this.geo.get("currentPosition"));
+        }
+        var self = this;
+        this.geo.on("change:currentPosition", function(){
+            renderCoords(self.geo.get("currentPosition"));
         });
 
         // Append

@@ -18,6 +18,7 @@ define("Geo", ["backbone"], function(Backbone){
         initialize: function(){
             var self = this;
             this.set("wpid", navigator.geolocation.watchPosition(function(position){
+                console.log("watchPosition event: " + position.coords.longitude + "," + position.coords.latitude);
                 self.set("currentPosition", position);
             }));
         },
