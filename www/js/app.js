@@ -1,10 +1,12 @@
-// The code below uses require.js, a module system for javscript:
-// http://requirejs.org/docs/api.html#define
 
-
-// Include the in-app payments API, and if it fails to load handle it
-// gracefully.
-// https://developer.mozilla.org/en/Apps/In-app_payments
+/**
+ * The code below uses require.js, a module system for javscript:
+ * http://requirejs.org/docs/api.html#define
+ * 
+ * Include the in-app payments API, and if it fails to load handle it
+ * gracefully.
+ * https://developer.mozilla.org/en/Apps/In-app_payments
+ */
 require(['https://marketplace.cdn.mozilla.net/mozmarket.js'],
         function() {},
         function(err) {
@@ -14,41 +16,57 @@ require(['https://marketplace.cdn.mozilla.net/mozmarket.js'],
             };
         });
 
-
-
-// When you write javascript in separate files, list them as
-// dependencies along with jquery
+/**
+ * The main 'app'. The routes are defined and placed below.
+ * When you write javascript in separate files, list them as
+ * dependencies along with jquery
+ */
 define("app", ['backbone', 'install', 'localstorage', 'Note'], function(Backbone, install, localstorage, Note) {
     var app = {},
-        noteList = new Note.List();
-/*
-        noteList.add(new Note.Model({text: "L.", position: {lat: 1, lng: 1}}));
-        */
-    var noteListView = new Note.ListView({collection: noteList}),
-      noteAddView = new Note.AddView();
+        noteList = new Note.List(),
+        noteListView = new Note.ListView({collection: noteList}),
+        noteAddView = new Note.AddView();
 
+    /**
+     * The router for the application.
+     */
     app.Router = Backbone.Router.extend({
         routes: {
             "add": "addNote",
             ".*": "viewNotes"
         },
+
+        /**
+         * switchView
+         * Will hide all the other values, then unhide itself.
+         * @param  string id The id of the element to unhide. (#page > #id)
+         */
         switchView: function(id) {
           console.log('switching...' , id);
           $('#pages .page').hide();
           $('#' + id).show();
         },
+
+        /**
+         * Viewing the notes
+         */
         viewNotes: function() {
           this.switchView('viewNotes');
           noteListView.render();
         },
+
+        /**
+         * Adding notes
+         */
         addNote: function() {
           this.switchView('addNote');
           noteAddView.render(noteList);
         }
     });
 
-    // Hook up the installation button, feel free to customize how
-    // this works
+    /**
+     * Boilerplate data
+     */
     function updateInstallButton() {
         $(function() {
             var btn = $('.install-btn');
@@ -82,6 +100,5 @@ define("app", ['backbone', 'install', 'localstorage', 'Note'], function(Backbone
         }, 8000);
     });
 
-    console.log(app);
     return app;
 });
