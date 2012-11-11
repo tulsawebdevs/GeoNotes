@@ -42,11 +42,9 @@
       </div>
       <div class="item">
         <span>
-          <span data-name="latitude"><%= latitude %></span>,
-          <span data-name="longitude"><%= longitude %></span>
+          <span data-name="latitude"></span>,
+          <span data-name="longitude"></span>
         </div>
-        <input type="hidden" data-name="latitude" value="<%=latitude%>" />
-        <input type="hidden" data-name="longitude" value="<%=longitude%>" />
       </div>
       <div class="item">
         <input type="button" class="button addNote" value="Add Note" />
@@ -54,7 +52,7 @@
     </script>
     <script id="note-list-template" type="text/template">
       <li>
-      <span class="text"><%= position.lat %>,<%= position.lng %>: <%= text %></span>
+      <span class="text"><%= position.coords.latitude %>,<%= position.coords.longitude %>: <%= text %></span>
         <span class="meta">
           <span class="badge distance"><%= distance %></span>
           <i class="icon-chevron-right"></i>
