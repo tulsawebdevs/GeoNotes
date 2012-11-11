@@ -42,7 +42,6 @@ define("app", ['backbone', 'install', 'localstorage', 'Note'], function(Backbone
          * @param  string id The id of the element to unhide. (#page > #id)
          */
         switchView: function(id) {
-          console.log('switching...' , id);
           $('#pages .page').hide();
           $('#' + id).show();
         },
