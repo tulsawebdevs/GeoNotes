@@ -79,6 +79,22 @@ define("Note", ["backbone", "localstorage"], function(Backbone, localstorage){
     });
 
     /**
+     * Will render the dinosaur image
+     */
+    Note.DinoView = Backbone.View.extend({
+      el: '#viewDino',
+      initialize: function(){
+        _.bindAll(this, 'render');
+      },
+      render: function(noteList){
+        this.$el.html($('<img />').attr({
+          'src': '/img/dino.png'
+        }));
+        return this;
+      }
+    });
+
+    /**
      * The view for the 'add' page.
      */
     Note.AddView = Backbone.View.extend({

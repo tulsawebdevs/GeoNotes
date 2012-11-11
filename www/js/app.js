@@ -25,7 +25,8 @@ define("app", ['backbone', 'install', 'localstorage', 'Note'], function(Backbone
     var app = {},
         noteList = new Note.List(),
         noteListView = new Note.ListView({collection: noteList}),
-        noteAddView = new Note.AddView();
+        noteAddView = new Note.AddView(),
+        dinoView = new Note.DinoView();
 
     /**
      * The router for the application.
@@ -33,6 +34,7 @@ define("app", ['backbone', 'install', 'localstorage', 'Note'], function(Backbone
     app.Router = Backbone.Router.extend({
         routes: {
             "add": "addNote",
+            "dino": "viewDino",
             ".*": "viewNotes"
         },
 
@@ -60,6 +62,14 @@ define("app", ['backbone', 'install', 'localstorage', 'Note'], function(Backbone
         addNote: function() {
           this.switchView('addNote');
           noteAddView.render(noteList);
+        },
+
+        /**
+         * Easter egg me, captain
+         */
+        viewDino: function() {
+          this.switchView('viewDino');
+          dinoView.render();
         }
     });
 

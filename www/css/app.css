@@ -86,3 +86,10 @@ button.install-btn {
     padding: 0;
     width: 100%; 
     }
+
+#viewDino {
+  text-align: center;
+  }
+#viewDino img {
+  width: 70%;
+  }
