@@ -21,11 +21,12 @@ require(['https://marketplace.cdn.mozilla.net/mozmarket.js'],
  * When you write javascript in separate files, list them as
  * dependencies along with jquery
  */
-define("app", ['backbone', 'install', 'localstorage', 'Note'], function(Backbone, install, localstorage, Note) {
-    var app = {},
-        noteList = new Note.List(),
+define("app", ['backbone', 'install', 'localstorage', 'Note', 'Geo'], function(Backbone, install, localstorage, Note, Geo) {
+    var app = {};
+        app.Geo = new Geo();
+    var noteList = new Note.List({geo: app.Geo}),
         noteListView = new Note.ListView({collection: noteList}),
-        noteAddView = new Note.AddView(),
+        noteAddView = new Note.AddView({geo: app.Geo});
         dinoView = new Note.DinoView();
 
     /**
@@ -53,6 +54,7 @@ define("app", ['backbone', 'install', 'localstorage', 'Note'], function(Backbone
          */
         viewNotes: function() {
           this.switchView('viewNotes');
+          noteList.fetch();
           noteListView.render();
         },
 

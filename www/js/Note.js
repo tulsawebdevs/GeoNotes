@@ -8,11 +8,13 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
      * Extend the note model and do nothing. [:
      */
     Note.Model = Backbone.Model.extend({
-      getDistance: function(){
-        return 20;
+      defaults: {
+          'text': "loading ...",
+          'distance': "loading ..."
       },
+
       serialize: function(){
-        return _.extend({ distance: this.getDistance() }, this.toJSON());
+        return _.extend(this.toJSON());
       }
    });
 
@@ -35,10 +37,15 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
     Note.List = Backbone.Collection.extend({
       model: Note.Model,
       localStorage: new Store("notes"),
-      initialize: function(){
-        this.fetch();
+      initialize: function(options){
+        this.geo = options.geo;
         this.on('add', function(model){
           model.save();
+        });
+        this.geo.on('change:currentPosition', function(){
+            _.each(this.models, function(note){
+                note.set("distance", this.geo.distance(note.position));
+            })
         });
       }
     });
@@ -112,8 +119,9 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
         "click input.button.addNote": "actionSubmit"
       },
       el: '#addNote',
-      initialize: function(){
+      initialize: function(options){
         _.bindAll(this, 'render');
+        this.geo = options.geo;
       },
       render: function(noteList){
         var data = $('#add-note-template').html(),
@@ -129,12 +137,9 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
         }
 
         // Geo location
-        var geo = new Geo();
-        var self = this;
-        geo.on("geo", function(position){
+        this.geo.on("change:currentPosition", function(position){
             $('span[data-name=latitude]', $('#addNote')).text(position.coords.latitude);
             $('span[data-name=longitude]', $('#addNote')).text(position.coords.longitude);
-            self.geo = geo;
         });
 
         // Append
@@ -146,7 +151,7 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
         // Variables
         var addNote = $('#addNote'),
           text = $('textarea[name=noteText]', addNote).val(),
-          position = this.geo.currentPosition;
+          position = this.geo.get("currentPosition");
         // Add note
         note = new Note.Model({
           text: text,

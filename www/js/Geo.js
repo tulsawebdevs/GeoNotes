@@ -17,16 +17,15 @@ define("Geo", ["backbone"], function(Backbone){
 
         initialize: function(){
             var self = this;
-            this.wpid = navigator.geolocation.watchPosition(function(position){
-                self.currentPosition = position;
-                self.trigger("geo", position);
-            });
+            this.set("wpid", navigator.geolocation.watchPosition(function(position){
+                self.set("currentPosition", position);
+            }));
         },
 
         // return haversine distance between pos1 and pos2 ...
         // or between pos1 and current position if pos2 is undefined
         distance: function(pos1, pos2){
-            pos2 = typeof pos2 !== 'undefined' ? pos2 : Geo.currentPosition;
+            pos2 = typeof pos2 !== 'undefined' ? pos2 : this.get("currentPosition");
             var R = 6371, //earth radius km
                 lat1 = pos1.coords.latitude,
                 lng1 = pos1.coords.longitude,
