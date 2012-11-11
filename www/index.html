@@ -27,12 +27,23 @@
       </div>
 
 
-      <div class="page" id="addNote">
-        meow!
-      </div>
+      <div class="page" id="addNote"></div>
 
 
     </div>
+    <script id="add-note-template" type="text/template">
+      <div class="item">
+        <label for="noteText"><h1>Add Note</h1></label>
+        <textarea name="noteText" id="noteText"></textarea>
+      </div>
+      <div class="item">
+        <input type="hidden" name="posx" id="posx" value="1" />
+        <input type="hidden" name="posy" id="posy" value="1" />
+      </div>
+      <div class="item">
+        <input type="button" class="button addNote" value="Add Note" />
+      </div>
+    </script>
     <script id="note-list-template" type="text/template">
       <li>
         <span class="text"><%= position.lat %>,<%= position.lng %>: <%= text %></span>
