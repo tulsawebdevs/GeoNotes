@@ -90,6 +90,9 @@ button.install-btn {
 #viewDino {
   text-align: center;
   }
+#viewDino a {
+  display: block;
+}
 #viewDino img {
   width: 70%;
   }
