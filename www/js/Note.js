@@ -7,7 +7,14 @@ define("Note", ["backbone", "localstorage"], function(Backbone, localstorage){
     /**
      * Extend the note model and do nothing. [:
      */
-    Note.Model = Backbone.Model.extend({});
+    Note.Model = Backbone.Model.extend({
+      getDistance: function(){
+        return 20;
+      },
+      serialize: function(){
+        return _.extend({ distance: this.getDistance() }, this.toJSON());
+      }
+   });
 
     /**
      * The base Template for ListItemView
@@ -16,7 +23,7 @@ define("Note", ["backbone", "localstorage"], function(Backbone, localstorage){
      */
     Note.TemplatedView = Backbone.View.extend({
       render: function(){
-        var html = this.template(this.model.toJSON());
+        var html = this.template(this.model.serialize());
         this.$el.html(html);
         return this;
       }
