@@ -18,12 +18,12 @@ h1 {
   margin-top: .3em;
   }
   
-#note-border {
+#note-border { 
   background-color:white;
   border-style: solid;
-  border-width: 2px; 
+    border-width: 2px; 
     border-color: #A3A3A3; 
-  border-radius: 10px;
+  	border-radius: 10px;
   }
   
 #note-list { 
@@ -69,6 +69,7 @@ h1 {
       }
 
 #add-note {
+  padding-top: 5px;
   background-color: white;
   text-align: center;
   margin-top:10px;
@@ -94,5 +95,60 @@ button.install-btn {
   display: block;
 }
 #viewDino img {
+  width: 70%;
+  }
+
+#list-view, #map-view {
+
+	padding-top: 5px;
+	width: 50%;
+	background-color: white;
+	text-align: center;
+	margin-top:10px;
+	height: 25px;
+	border-style: solid;
+  	border-width: 2px; 
+  	border-color: #A3A3A3; 
+
+	}
+
+#list-view {
+	position: fixed;
+	bottom: 0;
+	left: 0%;
+	}
+
+#map-view {
+	position: fixed;
+	bottom: 0;
+	right: 0%;
+}
+
+button.install-btn {
+    padding: 0;
+    width: 100%; 
+    }
+
+#viewDino {
+  text-align: center;
+  }
+#viewDino a {
+	padding-top: 5px;
+	position: fixed;
+	bottom: 2px;
+	left: 37%;
+	width: 25%;
+	background-color: white;
+	text-align: center;
+	margin-top:10px;
+	height: 25px;
+	border-style: solid;
+		border-width: 2px; 
+		border-color: #A3A3A3; 
+		border-radius: 10px;
+  
+}
+#viewDino img {
+  margin-top: 5em;
   width: 70%;
   }
