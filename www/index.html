@@ -9,22 +9,26 @@
     <script src="js/lib/modernizr-2.5.3.min.js"></script>    
   </head>
   <body>
+
     <div id="pages">
-
-
-      <div class="page" id="viewNotes">
+	  <div class="page" id="viewNotes">
         <div class="install-error"></div>
         <div class="install-ios-msg">
           To install, press the forward arrow in Safari and touch "Add to
           Home Screen"
         </div>
-        <h1>GeoNote</h1>
+        <div id="header"><h1>GeoNote</h1></div>
+	<div id="note-border">
         <section id="note-list">
           <ul></ul>
-          <a id="add-note" href="#add"><i class="icon-plus-sign"></i>Add Note</a>
+	</div>
+	
+	<div id="add-note">
+        <a href="#add"><i class="icon-plus-sign"></i>Add Note</a>
         </section>
         <button class="install-btn">Install</button>
-      </div>
+		</div>
+    </div>
 
 
       <div class="page" id="addNote"></div>
@@ -53,6 +57,8 @@
         </span>
       </li>
     </script>
+
     <script type="text/javascript" data-main="js/config.js" src="js/lib/require.js"></script>
+
   </body>
 </html>
