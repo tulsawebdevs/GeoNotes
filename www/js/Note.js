@@ -34,7 +34,7 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
             console.log("change:currentLat: " + self.geo.get("currentPosition"));
             _.each(self.models, function(note){
                 note.set("distance", self.geo.distance(note.get("position")));
-            })
+            });
         });
       }
     });
@@ -96,7 +96,7 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
       },
       render: function(noteList){
         this.$el.html($('<img />').attr({
-          'src': '/img/dino.png'
+          'src': './img/dino.png'
         })).prepend(
           $('<a href="#"><i class="icon-step-backward"></i>Back</a>')
         );
