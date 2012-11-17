@@ -1,12 +1,6 @@
-/**
- * Most of the note views, templates, and models are defined here
- */
 define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstorage, Geo){
     var Note = {};
 
-    /**
-     * Extend the note model and do nothing. [:
-     */
     Note.Model = Backbone.Model.extend({
       defaults: {
           'text': "loading ...",
@@ -18,9 +12,6 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
       }
    });
 
-    /**
-     * The collection of notes (aka notebook!)
-     */
     Note.List = Backbone.Collection.extend({
       model: Note.Model,
       localStorage: new Store("notes"),
@@ -30,20 +21,15 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
           model.save();
         });
         var self = this;
-        this.geo.on('change:currentLat change:currentLng', function(){
-            console.log("change:currentLat: " + self.geo.get("currentPosition"));
-            _.each(self.models, function(note){
-                note.set("distance", self.geo.distance(note.get("position")));
+        this.geo.on('change:currentLng', function(){
+            self.each(function(note){
+              if (note.has("coords"))
+                note.set("distance", self.geo.distance(note.get("coords")));
             });
         });
       }
     });
 
-    /**
-     * The main view for the ListView
-     *
-     * Note.ListView extends Note.ListItemView extends Note.TemplatedView
-     */
     Note.ListItemView = Backbone.View.extend({
       template: _.template($("#note-list-template").html()),
       initialize: function(){
@@ -57,11 +43,6 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
       }
     });
 
-    /**
-     * The view for the actual list
-     *
-     * Note.ListView extends Note.ListItemView extends Note.TemplatedView
-     */
     Note.ListView = Backbone.View.extend({
       el: '#note-list',
       initialize: function(){
@@ -69,6 +50,7 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
         this.collection.on('change', this.render);
       },
       render: function(){
+        console.log("Note.ListView, render");
         var $ul = this.$el.find("ul");
         $ul.empty();
         this.collection.each(function(model){
@@ -79,16 +61,10 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
       }
     });
 
-    /**
-     * If we want to make a detail view in the future
-     */
     Note.DetailView = Backbone.View.extend({
         // TODO: implement
     });
 
-    /**
-     * Will render the dinosaur image
-     */
     Note.DinoView = Backbone.View.extend({
       el: '#viewDino',
       initialize: function(){
@@ -104,59 +80,40 @@ define("Note", ["backbone", "localstorage", "Geo"], function(Backbone, localstor
       }
     });
 
-    /**
-     * The view for the 'add' page.
-     */
     Note.AddView = Backbone.View.extend({
-      noteList: null,
-      events: {
-        "click input.button.addNote": "actionSubmit"
-      },
       el: '#addNote',
+      noteList: null,
+
+      events: {
+        "click button#btnAdd": "actionSubmit"
+      },
+
       initialize: function(options){
+        this.geo        = options.geo;
+        this.noteList   = options.noteList;
+        this.coordsView = new Geo.CoordsView({model: this.geo});
         _.bindAll(this, 'render');
-        this.geo = options.geo;
       },
+
       render: function(noteList){
-        var data = $('#add-note-template').html(),
-          addNote = $('#addNote');
-
-        // Cache value
-        this.noteList = noteList;
-
-        // To render or not to render
-        if(addNote.text().length > 0) {
-          $('textarea').val('');
-          return; // lol wut?
-        }
-
-        // Render coords - now and/or when they update
-        var renderCoords = function(position){
-            $('span[data-name=latitude]', $('#addNote')).text(position.coords.latitude);
-            $('span[data-name=longitude]', $('#addNote')).text(position.coords.longitude);
-        };
-        if (this.geo.get("currentPosition").coords) {
-            renderCoords(this.geo.get("currentPosition"));
-        }
-        var self = this;
-        this.geo.on("change:currentLat change:currentLng", function(){
-            renderCoords(self.geo.get("currentPosition"));
-        });
-
-        // Append
-        addNote.append(data);
-
-        return this;
+        this.coordsView.render();
       },
+
       actionSubmit: function() {
         // Variables
-        var addNote = $('#addNote'),
-          text = $('textarea[name=noteText]', addNote).val(),
-          position = this.geo.get("currentPosition");
+        var addNote   = $('#addNote'),
+            text      = $('#noteText', addNote).val(),
+            lat       = this.geo.get("currentLat"),
+            lon       = this.geo.get("currentLng"),
+            coords    = this.geo.get("currentCoords"),
+            time      = this.geo.get("timestamp");
         // Add note
-        note = new Note.Model({
+        var note = new Note.Model({
           text: text,
-          position: position
+          lat: lat,
+          lon: lon,
+          coords: coords,
+          time: time
         });
         this.noteList.add(note);
         // Redirect

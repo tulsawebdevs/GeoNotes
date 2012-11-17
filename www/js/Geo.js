@@ -1,6 +1,6 @@
 define("Geo", ["backbone"], function(Backbone){
 
-    var Geo;
+    var Geo = {};
 
     if ("geolocation" in navigator) {
     } else {
@@ -8,35 +8,38 @@ define("Geo", ["backbone"], function(Backbone){
         return null;
     }
 
-    var Geo = Backbone.Model.extend({
+    Geo.Model = Backbone.Model.extend({
 
         defaults: {
             wpid: '',
-            currentPosition: '',
             currentLat: '',
             currentLng: '',
+            timestamp: '',
+            currentCoords: '',
         },
 
         initialize: function(){
             var self = this;
             this.set("wpid", navigator.geolocation.watchPosition(function(position){
                 console.log("watchPosition event: " + position.coords.longitude + "," + position.coords.latitude);
-                self.set("currentPosition", position);
                 self.set("currentLat", position.coords.latitude);
                 self.set("currentLng", position.coords.longitude);
-                var geoposition = self.get("currentPosition");
+                self.set("currentCoords", position.coords.longitude + "," + position.coords.latitude);
+                self.set("timestamp", position.timestamp);
             }, null, {maximumAge: 1000}));
         },
 
         // return haversine distance between pos1 and pos2 ...
         // or between pos1 and current position if pos2 is undefined
-        distance: function(pos1, pos2){
-            pos2 = typeof pos2 !== 'undefined' ? pos2 : this.get("currentPosition");
+        distance: function(coords1, coords2){
+          coords2 = typeof coords2 !== 'undefined' ? coords2 : this.get("currentCoords");
+          var pos1 = coords1.split(","),
+              pos2 = coords2.split(",");
             var R = 3961, //earth radius km
-                lat1 = pos1.coords.latitude,
-                lng1 = pos1.coords.longitude,
-                lat2 = pos2.coords.latitude,
-                lng2 = pos2.coords.longitude;
+                lat1 = pos1[1],
+                lng1 = pos1[0],
+                lat2 = pos2[1],
+                lng2 = pos2[0];
             var dLat = (lat2 - lat1) * Math.PI / 180,
                 dLng = (lng2 - lng1) * Math.PI / 180,
                 lat1 = lat1 * Math.PI / 180,
@@ -49,6 +52,18 @@ define("Geo", ["backbone"], function(Backbone){
             var yards = Math.round((distance * 1760) * 10)/10,
                 feet  = Math.round((distance * 5280) * 10)/10;
             return {miles: miles, yards: yards, feet: feet};
+        }
+    });
+
+    Geo.CoordsView = Backbone.View.extend({
+      el: $('#coordsView'),
+      tagName: 'span',
+      className: 'geoCoords',
+      initialize: function(options){
+        this.model.on('change:timestamp', _.bind(this.render, this));
+      },
+      render: function(){
+        this.$el.html('<span class="lng" data-name="longitude">'+this.model.get('currentLng')+','+'<span class="lat" data-name="latitude">'+this.model.get('currentLat'));
         }
     });
 

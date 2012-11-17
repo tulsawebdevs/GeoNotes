@@ -22,12 +22,12 @@ require(['https://marketplace.cdn.mozilla.net/mozmarket.js'],
  * dependencies along with jquery
  */
 define("app", ['backbone', 'install', 'localstorage', 'Note', 'Geo'], function(Backbone, install, localstorage, Note, Geo) {
-    var app = {};
-        app.Geo = new Geo();
-    var noteList = new Note.List({geo: app.Geo}),
-        noteListView = new Note.ListView({collection: noteList}),
-        noteAddView = new Note.AddView({geo: app.Geo});
-        dinoView = new Note.DinoView();
+    var app           = {};
+        app.Geo       = new Geo.Model();
+    var noteList      = new Note.List({geo: app.Geo});
+    var noteListView  = new Note.ListView({collection: noteList}),
+        noteAddView   = new Note.AddView({geo: app.Geo, noteList: noteList}),
+        dinoView      = new Note.DinoView();
 
     /**
      * The router for the application.
@@ -49,25 +49,16 @@ define("app", ['backbone', 'install', 'localstorage', 'Note', 'Geo'], function(B
           $('#' + id).show();
         },
 
-        /**
-         * Viewing the notes
-         */
         viewNotes: function() {
           this.switchView('viewNotes');
           noteList.fetch();
         },
 
-        /**
-         * Adding notes
-         */
         addNote: function() {
           this.switchView('addNote');
           noteAddView.render(noteList);
         },
 
-        /**
-         * Easter egg me, captain
-         */
         viewDino: function() {
           this.switchView('viewDino');
           dinoView.render();
@@ -76,42 +67,6 @@ define("app", ['backbone', 'install', 'localstorage', 'Note', 'Geo'], function(B
 
     window.app = app;
     window.noteList = noteList;
-
-    /**
-     * Boilerplate data
-     */
-    function updateInstallButton() {
-        $(function() {
-            var btn = $('.install-btn');
-            if(install.state == 'uninstalled') {
-                btn.show();
-            }
-            else if(install.state == 'installed' || install.state == 'unsupported') {
-                btn.hide();
-            }
-        });
-    }
-
-    $(function() {
-        $('.install-btn').click(install);
-    });
-
-    install.on('change', updateInstallButton);
-
-    install.on('error', function(e, err) {
-        // Feel free to customize this
-        $('.install-error').text(err.toString()).show();
-    });
-
-    install.on('showiOSInstall', function() {
-        // Feel free to customize this
-        var msg = $('.install-ios-msg');
-        msg.show();
-        
-        setTimeout(function() {
-            msg.hide();
-        }, 8000);
-    });
 
     return app;
 });

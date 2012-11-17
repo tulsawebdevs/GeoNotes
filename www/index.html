@@ -13,44 +13,39 @@
     <div id="pages">
 
       <div class="page" id="viewNotes">
-          <div class="install-error"></div>
-          <div class="install-ios-msg">
-            To install, press the forward arrow in Safari and touch "Add to
-            Home Screen"
-          </div>
-          <div id="header"><h1>GeoNote</h1></div>
-          <div id="note-border">
-              <section id="note-list">
-                <ul></ul>
-              </section>
-          </div>
-          <div id="add-note">
-              <a href="#add"><i class="icon-plus-sign"></i>Add Note</a>
-              <a href="#dino"><i class="icon-star"></i>Dinosaur</a>
-			<div id="list-view"><a href="#listview">List View</a></div>
-			<div id="map-view"><a href="#mapview">Map View</a></div>
-          </div>
+        <div id="header"><h1>GeoNote</h1></div>
+        <div id="note-border">
+            <section id="note-list">
+              <ul></ul>
+            </section>
+        </div>
+        <div id="add-note">
+          <a href="#add"><i class="icon-plus-sign"></i>Add Note</a>
+          <a href="#dino"><i class="icon-star"></i>Dinosaur</a>
+        </div>
+        <div id="list-view"><a href="#listview">List View</a></div>
+        <div id="map-view"><a href="#mapview">Map View</a></div>
       </div>
 
-      <div class="page" id="addNote"></div>
+      <div class="page" id="addNote">
+        <form id="addNote">
+          <fieldset>
+            <legend>Add Note</legend>
+            <textarea class="field" name="noteText" id="noteText" placeholder="Enter note"></textarea>
+            <div id="add_coords">
+              <button id="btnAdd" type="submit" class="btn">Add</button> to
+              <span id="coordsView"></span>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
       <div class="page" id="viewDino"></div>
 
     </div>
-    <script id="add-note-template" type="text/template">
-      <div class="item">
-        <label for="noteText"><h1>Add Note</h1></label>
-        <textarea name="noteText" id="noteText"></textarea>
-      </div>
-      <div class="item">
-        <span>
-          <span data-name="latitude"></span>,
-          <span data-name="longitude"></span>
-        </div>
-      </div>
-      <div class="item">
-        <input type="button" class="button addNote" value="Add Note" />
-      </div>
-    </script>
+
+
+
     <script id="note-list-template" type="text/template">
       <% 
       var distance_display = '';
