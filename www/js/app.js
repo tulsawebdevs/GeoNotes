@@ -36,6 +36,8 @@ define("app", ['backbone', 'install', 'localstorage', 'Note', 'Geo'], function(B
         routes: {
             "add": "addNote",
             "dino": "viewDino",
+            "list": "viewNotes",
+            "map": "viewMap",
             ".*": "viewNotes"
         },
 
@@ -51,6 +53,11 @@ define("app", ['backbone', 'install', 'localstorage', 'Note', 'Geo'], function(B
 
         viewNotes: function() {
           this.switchView('viewNotes');
+          noteList.fetch();
+        },
+
+        viewMap: function() {
+          this.switchView('viewMap');
           noteList.fetch();
         },
 
