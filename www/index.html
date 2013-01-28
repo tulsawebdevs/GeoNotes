@@ -59,9 +59,12 @@
         distance_display = distance.miles + ' mi';
       } else if (distance.yards > 0) {
         distance_display = distance.yards + ' yds';
-      } else {
+      } else if (distance.feet > 0) {
         distance_display = distance.feet + ' ft';
+      } else {
+        distance_display = "calculating...";
       }
+        
       %>
       <li>
       <span class="text"><%= text %></span>
