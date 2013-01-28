@@ -6,6 +6,7 @@ Requirements
 ============
 * git
 * node
+* volo
 
 Quick Start
 ===========
@@ -23,6 +24,10 @@ Install Requirements
 GeoNotes uses node and some libraries for local dev and github deployment::
 
     npm install
+
+Install ``volo`` if you don't already have it::
+
+    npm install -g volo
 
 Serve the app
 -------------
